@@ -13,13 +13,14 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("books")
 public class MyResource {
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
     public List<String> getBooks() {
     	List<String> books = new ArrayList<>();
     	
     	books.add("Harap Alb");
     	books.add("Harry Potter and the Philosopher's Stone");
+    	books.add("Cartea 1");
     	
     	return books;
     }
