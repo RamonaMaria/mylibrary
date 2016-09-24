@@ -11,7 +11,8 @@ import javax.ws.rs.core.MediaType;
 /**
  * Root resource (exposed at "myresource" path)
  */
-@Path("books")
+
+@Path("clasa")
 public class MyResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

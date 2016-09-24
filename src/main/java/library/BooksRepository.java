@@ -8,12 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.transform.Result;
-
 import com.mysql.jdbc.PreparedStatement;
-
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class BooksRepository {
 
@@ -54,12 +49,13 @@ public class BooksRepository {
 
 	Book addBook(Book book) throws SQLException {
 
-		String insertTableSQL = "INSERT INTO tabael2" + " VALUES" + "(?,?,?)";
+		String insertTableSQL = "INSERT INTO books" + " VALUES" + "(?,?,?,?)";
 		PreparedStatement preparedStatement = (PreparedStatement) connection.prepareStatement(insertTableSQL,
 				Statement.RETURN_GENERATED_KEYS);
 		preparedStatement.setLong(1, book.getId());
-		preparedStatement.setString(2, book.getNume());
-		preparedStatement.setString(3, book.getAutor());
+		preparedStatement.setString(2, book.getAuthor());
+		preparedStatement.setString(3, book.getBook());
+		preparedStatement.setString(4, book.getGenre());
 
 		int result = preparedStatement.executeUpdate();
 
@@ -82,31 +78,110 @@ public class BooksRepository {
 		List<Book> books = new ArrayList<Book>();
 		Statement stmt = connection.createStatement();
 
-		String sql = "SELECT id, nume, prenume FROM tabael2";
+		String sql = "SELECT id, author, book, genre FROM books";
 		ResultSet rs = stmt.executeQuery(sql);
 		while (rs.next()) {
 			Book book = new Book();
-			
+
 			book.id = rs.getLong("id");
-			book.autor = rs.getString("prenume");
-			book.nume = rs.getString("nume");
+			book.author = rs.getString("author");
+			book.book = rs.getString("book");
+			book.genre = rs.getString("genre");
 
 			books.add(book);
 		}
 		return books;
 	}
 
-	
-	Book getBook (int id) throws SQLException {
-		
-		/*
-		 * select * from tabael2
-		   where id=801
-		 */
+	Book getBook(int id) throws SQLException {
 		Statement stmt = connection.createStatement();
-		String sql = "SELECT * FROM tabael2 where id=" + id;
+		String sql = "SELECT * FROM books where id=" + id;
 		ResultSet rs = stmt.executeQuery(sql);
-		return null;
-		
+		Book book = new Book();
+		if (rs.next()) {
+			book.id = rs.getLong("id");
+			book.author = rs.getString("author");
+			book.book = rs.getString("book");
+			book.genre = rs.getString("genre");
+		}
+
+		return book;
 	}
+
+	void deleteBook(int id) throws SQLException {
+
+		String deleteSQL = "delete from books where id=?";
+		PreparedStatement stmt = (PreparedStatement) connection.prepareStatement(deleteSQL);
+		stmt.setInt(1, id);
+		stmt.executeUpdate();
+	}
+
+	void updateBook(int id, Book newBook) throws SQLException {
+
+		String updateSQL = "UPDATE books set author=?, book=?, genre=? where id=" + id;
+		PreparedStatement stmt = (PreparedStatement) connection.prepareStatement(updateSQL);
+		stmt.setString(1, newBook.author);
+		stmt.setString(2, newBook.book);
+		stmt.setString(3, newBook.genre);
+
+		stmt.executeUpdate();
+	}
+
+	// ****************************
+	List<Book> getBooksAuthorGenre(String author, String genre) throws SQLException {
+
+		List<Book> books = new ArrayList<Book>();
+		Statement stmt = connection.createStatement();
+		if (author == null && genre != null) {
+
+			String sql = "SELECT * FROM books where genre='" + genre + "'";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				Book book = new Book();
+
+				book.id = rs.getLong("id");
+				book.author = rs.getString("author");
+				book.book = rs.getString("book");
+				book.genre = rs.getString("genre");
+
+				books.add(book);
+			}
+			return books;
+		}
+
+		if (genre == null) {
+			String sql = "select * from books where author='" + author + "'";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				Book book = new Book();
+
+				book.id = rs.getLong("id");
+				book.author = rs.getString("author");
+				book.book = rs.getString("book");
+				book.genre = rs.getString("genre");
+
+				books.add(book);
+			}
+			return books;
+
+		} else {
+			String sql = "select * from books where author='" + author + "'&& genre='" + genre + "'";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				Book book = new Book();
+
+				book.id = rs.getLong("id");
+				book.author = rs.getString("author");
+				book.book = rs.getString("book");
+				book.genre = rs.getString("genre");
+
+				books.add(book);
+			}
+			return books;
+		}
+	}
+
 }

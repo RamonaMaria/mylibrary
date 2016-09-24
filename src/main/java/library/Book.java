@@ -6,27 +6,34 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Book {
 
-	String nume;
-	String autor;
+	String author;
+	String book;
+	String genre;
 	long id;
 
 	public Book() {
 	}
 
-	public Book(String nume, String autor, long id) {
-		this.nume = nume;
-		this.autor = autor;
+	public Book(String nume, String autor, String genre, long id) {
+		this.author = nume;
+		this.book = autor;
+		this.genre = genre;
 		this.id = id;
 	}
 
 	@XmlElement
-	public void setNume(String nume) {
-		this.nume = nume;
+	public void setBook(String book) {
+		this.book = book;
 	}
 
 	@XmlElement
-	public void setAutor(String autor) {
-		this.autor = autor;
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+	@XmlElement
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 	@XmlElement
@@ -34,15 +41,19 @@ public class Book {
 		this.id = l;
 	}
 
-	
 	@XmlElement
-	public String getNume() {
-		return nume;
+	public String getAuthor() {
+		return author;
 	}
 
 	@XmlElement
-	public String getAutor() {
-		return autor;
+	public String getBook() {
+		return book;
+	}
+	
+	@XmlElement
+	public String getGenre() {
+		return genre;
 	}
 
 	@XmlElement
@@ -51,6 +62,6 @@ public class Book {
 	}
 
 	public String toString() {
-		return "(id: " + id + " nume: " + nume + ", autor: " + autor + ")";
+		return "(id: " + id + " author: " + author + ", book: " + book + " genre: " + genre + ")";
 	}
 }

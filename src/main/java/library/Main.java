@@ -24,11 +24,12 @@ public class Main {
         // in library package
         final ResourceConfig rc = new ResourceConfig().packages("library");
 
+        
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
-
+    
     /**
      * Main method.
      * @param args
